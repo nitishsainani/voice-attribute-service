@@ -1,0 +1,53 @@
+# ─────────────────────────────────────────────────────────────
+# Docker Compose for voice-attribute-service
+#
+# Usage:
+#   docker compose up --build        # Build and start
+#   docker compose up -d             # Start in background
+#   docker compose logs -f           # Follow logs
+#   docker compose down              # Stop and remove
+# ─────────────────────────────────────────────────────────────
+
+services:
+  voice-attribute-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    ports:
+      - "8000:8000"
+
+    # Mount volumes for persistent data
+    volumes:
+      # Trained classifier models (joblib files)
+      - ./models:/app/models
+
+      # Raw and processed training data
+      - ./data:/app/data
+
+      # Cache for the downloaded SpeechBrain model
+      # (avoids re-downloading on container restart)
+      - ./pretrained_models:/app/pretrained_models
+
+      # Sample audio files for testing
+      - ./samples:/app/samples
+
+    environment:
+      # Override any config.py settings via env vars
+      - LOG_LEVEL=INFO
+      - SAMPLE_RATE=16000
+      - MIN_AUDIO_DURATION=1.0
+      - STREAM_CHUNK_SECONDS=2.0
+      - ENABLE_LANGUAGE_DETECTION=true
+      - LANGUAGE_CONFIDENCE_THRESHOLD=0.50
+
+    # Restart on failure (but not on manual stop)
+    restart: unless-stopped
+
+    # Resource limits (adjust for your hardware)
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+        reservations:
+          memory: 2G

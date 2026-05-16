@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual environment
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Data & models (too large for git)
+data/raw/*
+data/processed/*
+data/embeddings/*
+models/*.joblib
+pretrained_models/
+
+# Keep directory structure
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+!data/embeddings/.gitkeep
+
+# Environment files
+.env
+.env.local
+
+# OS
+.DS_Store
+Thumbs.db
