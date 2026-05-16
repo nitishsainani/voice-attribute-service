@@ -18,7 +18,8 @@ FROM python:3.11-slim AS builder
 WORKDIR /build
 
 # Install system dependencies for audio processing
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends --fix-missing \
     build-essential \
     libsndfile1 \
     ffmpeg \
@@ -35,7 +36,8 @@ FROM python:3.11-slim AS runtime
 WORKDIR /app
 
 # Install runtime-only system dependencies
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends --fix-missing \
     libsndfile1 \
     ffmpeg \
     && rm -rf /var/lib/apt/lists/*
